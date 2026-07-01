@@ -117,6 +117,10 @@ body {
 .stat-label { font-size: 13px; color: var(--muted); }
 .stat-value { font-size: 22px; font-weight: 700; margin-top: 6px; }
 
+/* streak 강조 (3일 이상 연속시 주황색으로) */
+.streak-card.streak-hot { border: 1.5px solid var(--break); }
+.streak-card.streak-hot .stat-value { color: var(--break); }
+
 /* 목표 종료 예상일 */
 .eta-text {
   text-align: center;
@@ -179,6 +183,18 @@ body {
   border: 1px solid var(--panel-2); border-radius: 10px; padding: 10px;
 }
 .switch { width: 26px; height: 26px; accent-color: var(--accent); }
+/* 설정 화면 select 요소 스타일 */
+.set-select {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--panel-2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 15px;
+  font-family: inherit;
+  min-width: 120px;
+  text-align: right;
+}
 .sep { border: none; border-top: 1px solid var(--panel); margin: 20px 0; }
 .set-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .set-actions .btn { flex: 1; min-width: 140px; text-align: center; }

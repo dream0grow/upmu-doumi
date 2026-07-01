@@ -1,0 +1,8 @@
+allowBuilds:
+  better-sqlite3: false
+  electron-winstaller: false
+onlyBuiltDependencies:
+  - better-sqlite3
+  - electron
+  - electron-winstaller
+  - esbuild

@@ -144,6 +144,24 @@ def _decode_para_text(chunk: bytes) -> str:
             i += 2
             continue
 
+        # BMP 밖 글자(이모지 등)는 UTF-16 에서 '서로게이트 쌍'(2개 코드)으로 옵니다.
+        # 높은 서로게이트면 다음 낮은 서로게이트와 합쳐 한 글자로 만듭니다.
+        if 0xD800 <= code <= 0xDBFF:
+            if i + 4 <= n:
+                low = struct.unpack("<H", chunk[i + 2:i + 4])[0]
+                if 0xDC00 <= low <= 0xDFFF:
+                    combined = 0x10000 + ((code - 0xD800) << 10) + (low - 0xDC00)
+                    out.append(chr(combined))
+                    i += 4
+                    continue
+            # 짝이 없는 외톨이 서로게이트 → 깨진 글자이므로 버립니다.
+            i += 2
+            continue
+        if 0xDC00 <= code <= 0xDFFF:
+            # 짝 없는 낮은 서로게이트도 버립니다.
+            i += 2
+            continue
+
         # 평범한 글자.
         out.append(chr(code))
         i += 2

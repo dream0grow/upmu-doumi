@@ -30,13 +30,13 @@ if __package__ in (None, ""):
         extract_pdf, extract_xlsx, extract_xls, extract_odt, extract_hwpx, extract_hwp,
         ImagePdfError,
     )
-    from src.extractor import parse_filename, ParsedFilename
+    from src.extractor import parse_filename, ParsedFilename, extract_deadlines
 else:
     from .parsers import (
         extract_pdf, extract_xlsx, extract_xls, extract_odt, extract_hwpx, extract_hwp,
         ImagePdfError,
     )
-    from .extractor import parse_filename, ParsedFilename
+    from .extractor import parse_filename, ParsedFilename, extract_deadlines
 
 
 # 확장자 → 어떤 파서를 쓸지 연결한 표.
@@ -58,11 +58,18 @@ class ExtractResult:
     filename_info: dict = field(default_factory=dict)  # 파일명에서 뽑은 정보
     text: str = ""                                     # 본문 텍스트
     char_count: int = 0                                # 본문 글자 수
+    deadline_info: dict = field(default_factory=dict)  # 마감일 추출 결과 (MVP-2)
     ok: bool = False                                   # 성공 여부
     message: str = ""                                  # 실패/안내 메시지
 
     def to_dict(self) -> dict:
         return asdict(self)
+
+
+def _sanitize(text: str) -> str:
+    """짝 없는 서로게이트 등 깨진 글자를 제거합니다 (UTF-8 인코딩 안전)."""
+    # encode 가 실패하는 문자만 골라 없앱니다.
+    return text.encode("utf-8", "ignore").decode("utf-8")
 
 
 def extract_file(path: str) -> ExtractResult:
@@ -105,8 +112,16 @@ def extract_file(path: str) -> ExtractResult:
         result.message = f"본문을 읽는 중 문제가 생겼습니다: {e}"
         return result
 
+    # 혹시 남아 있을 깨진 유니코드(외톨이 서로게이트)를 제거 → JSON/화면 출력 안전.
+    text = _sanitize(text)
+
     result.text = text
     result.char_count = len(text)
+
+    # ③ 마감일 추출 (MVP-2, 규칙 기반) — 본문에서 날짜를 뽑아 성격을 가립니다.
+    deadlines = extract_deadlines(text)
+    result.deadline_info = deadlines.to_dict()
+
     result.ok = True
     result.message = "추출 성공"
     return result
@@ -131,12 +146,60 @@ def _print_human(result: ExtractResult) -> None:
         print(f"  · 제목     : {info.get('title')}")
     print("-" * 60)
     if result.ok:
+        _print_deadlines(result.deadline_info)
+        print("-" * 60)
         print(f"[본문 텍스트]  글자 수: {result.char_count}")
         print()
         print(result.text)
     else:
         print(f"[안내] {result.message}")
     print("=" * 60)
+
+
+def _meaningful_reference_dates(all_dates: list) -> list:
+    """참고 날짜 중 사람에게 의미있는 것만 (문서 처리일 노이즈 제외, iso 중복 제거)."""
+    hidden_keywords = {"문서처리일", "기간시작"}
+    seen = set()
+    out = []
+    for d in all_dates:
+        if d["is_deadline"]:
+            continue
+        if d.get("keyword") in hidden_keywords:
+            continue
+        if d["iso"] in seen:
+            continue
+        seen.add(d["iso"])
+        out.append(d)
+    return out
+
+
+def _print_deadlines(info: dict) -> None:
+    """마감일 추출 결과를 사람이 읽기 좋게 출력합니다 (MVP-2)."""
+    print("[마감일]  ※ 규칙 기반 — 날짜는 코드로, 사람이 확인")
+    if not info.get("has_deadline"):
+        refs = _meaningful_reference_dates(info.get("all_dates", []))
+        if refs:
+            print("  (액션 기한 없음 — 아래는 참고 날짜)")
+            for d in refs:
+                print(f"    · [{d['label']}] {d['raw']}  (근거: '{d.get('keyword')}')")
+        else:
+            print("  (기한 없는 참고/규정/배포성 공문으로 보임 — 마감일 없음)")
+        return
+
+    primary = info.get("primary")
+    if primary:
+        print(f"  ★ 대표 마감: [{primary['label']}] {primary['raw']}  ← 가장 이른 기한")
+    print("  · 발견된 기한(이른 순):")
+    for d in info.get("deadlines", []):
+        star = " ★" if primary and d["iso"] == primary["iso"] else ""
+        print(f"      [{d['label']}] {d['raw']}{star}  (근거: '{d.get('keyword')}')")
+    # 행사일 등 '마감 아닌 의미있는 날짜'만 함께 보여줍니다 (설계서: 날짜 2개 함정 방지).
+    # 문서 처리일(시행·접수) 같은 라우팅 메타데이터는 노이즈라 숨깁니다.
+    others = _meaningful_reference_dates(info.get("all_dates", []))
+    if others:
+        print("  · 참고 날짜(행사일 등, 마감 아님):")
+        for d in others:
+            print(f"      [{d['label']}] {d['raw']}  (근거: '{d.get('keyword')}')")
 
 
 def main(argv=None) -> int:

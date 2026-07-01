@@ -1,5 +1,6 @@
 // progress.js — 진행 화면
 // 100시간 목표 대비: 누적 공부시간 / 남은 시간 / 진행률 / 오늘 공부시간
+// + 월간·전체 통계 / 연속 공부일(streak)
 
 window.App = window.App || {};
 
@@ -20,6 +21,7 @@ App.progress = (function () {
     App.util.$("#pg-bar-fill").style.width = pct + "%";
 
     renderEta(remain);
+    renderStats();
     renderWeek();
   }
 
@@ -46,15 +48,40 @@ App.progress = (function () {
     const daysLeft = Math.ceil(remainSec / avg);
 
     // 예상 완료일 = 오늘 + daysLeft일
-    // 오늘을 이미 일부 공부했으니 오늘 자정 이후를 기준으로 하는 게 자연스럽습니다.
-    // 단, 단순하게 오늘 + daysLeft로 하면 오늘이 이미 공부한 날이라도 1일로 카운트되는 문제가 있습니다.
-    // 여기서는 단순하게 '오늘에서 daysLeft일 후'로 표시합니다.
     const eta = new Date();
     eta.setDate(eta.getDate() + daysLeft);
 
     const month = eta.getMonth() + 1; // getMonth()는 0부터 시작하므로 +1
     const day   = eta.getDate();
     el.textContent = "이 속도면 " + month + "월 " + day + "일 완료";
+  }
+
+  // 월간·전체 통계 및 연속 공부일(streak) 표시
+  function renderStats() {
+    const now = new Date();
+
+    // 이번 달 공부시간
+    const thisMonthSec = App.store.monthSeconds(now.getFullYear(), now.getMonth());
+    const monthEl = App.util.$("#pg-month");
+    if (monthEl) monthEl.textContent = App.util.hm(thisMonthSec);
+
+    // 전체 공부한 날 수
+    const studyDaysEl = App.util.$("#pg-study-days");
+    if (studyDaysEl) studyDaysEl.textContent = App.store.totalStudyDays() + "일";
+
+    // 연속 공부일(streak)
+    const streak = App.store.currentStreak();
+    const streakEl = App.util.$("#pg-streak");
+    if (streakEl) {
+      // streak이 0이면 '공부를 시작하면 불꽃이 켜져요', 1 이상이면 일수 표시
+      streakEl.textContent = streak > 0 ? streak + "일 연속" : "-";
+    }
+
+    // streak 불꽃 아이콘: 3일 이상이면 강조색으로 변경
+    const streakCard = App.util.$("#pg-streak-card");
+    if (streakCard) {
+      streakCard.classList.toggle("streak-hot", streak >= 3);
+    }
   }
 
   // 최근 7일 막대그래프 (하루 공부시간)

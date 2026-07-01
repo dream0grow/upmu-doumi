@@ -1,5 +1,7 @@
 // settings.js — 설정 화면
 //  - 휴식 주기(N)·휴식 길이·목표시간·완료음·화면켜두기
+//  - 완료음 종류 선택(삐삐/맑은 종/부드러운 차임)
+//  - 진동 토글 (지원 기기만 표시)
 //  - 데이터 내보내기/가져오기(백업), 기록 초기화
 
 window.App = window.App || {};
@@ -13,6 +15,20 @@ App.settings = (function () {
     App.util.$("#set-longBreakEvery").value = s.longBreakEvery;
     App.util.$("#set-goal").value = s.goalHours;
     App.util.$("#set-beep").checked = s.beepEnabled;
+
+    // 완료음 종류 선택 (select)
+    const beepTypeEl = App.util.$("#set-beep-type");
+    if (beepTypeEl) beepTypeEl.value = s.beepType || "beep";
+
+    // 진동 토글 — 지원 기기에서만 행 표시
+    const vibrateRow = App.util.$("#set-vibrate-row");
+    if (vibrateRow) {
+      // 진동 미지원 기기에서는 행 자체를 숨깁니다.
+      vibrateRow.hidden = !App.beep.isVibrateSupported();
+    }
+    const vibrateEl = App.util.$("#set-vibrate");
+    if (vibrateEl) vibrateEl.checked = s.vibrateEnabled !== false; // 기본 true
+
     App.util.$("#set-awake").checked = s.keepAwake;
 
     // 화면 켜두기 미지원 기기 안내
@@ -46,6 +62,28 @@ App.settings = (function () {
     App.util.$("#set-beep").addEventListener("change", (e) =>
       App.store.updateSettings({ beepEnabled: e.target.checked })
     );
+
+    // 완료음 종류 변경 — 선택 즉시 미리 들어볼 수 있게 play() 호출
+    const beepTypeEl = App.util.$("#set-beep-type");
+    if (beepTypeEl) {
+      beepTypeEl.addEventListener("change", (e) => {
+        App.store.updateSettings({ beepType: e.target.value });
+        // 완료음이 켜져 있을 때만 미리 듣기
+        if (App.store.getSettings().beepEnabled) {
+          App.beep.unlock(); // iOS 오디오 잠금 해제 (제스처 안에서 호출)
+          App.beep.play();
+        }
+      });
+    }
+
+    // 진동 토글
+    const vibrateEl = App.util.$("#set-vibrate");
+    if (vibrateEl) {
+      vibrateEl.addEventListener("change", (e) =>
+        App.store.updateSettings({ vibrateEnabled: e.target.checked })
+      );
+    }
+
     App.util.$("#set-awake").addEventListener("change", (e) =>
       App.store.updateSettings({ keepAwake: e.target.checked })
     );

@@ -20,6 +20,8 @@ App.store = (function () {
     longBreakEvery: 2,    // 몇 번째 휴식마다 긴 휴식을 줄지 (예: 2 = 두 번째 휴식마다)
     goalHours: 100,       // 목표 시간
     beepEnabled: true,    // 완료음 사용
+    beepType: "beep",     // 완료음 종류: "beep"(삐삐) | "bell"(맑은 종) | "chime"(차임)
+    vibrateEnabled: true, // 진동 사용 (지원 기기만)
     keepAwake: true,      // 화면 켜두기 사용
   };
 
@@ -120,6 +122,47 @@ App.store = (function () {
     return out;
   }
 
+  // 특정 연/월의 총 공부 초 (월간 통계용)
+  // month는 0~11 (자바스크립트 Date 기준)
+  function monthSeconds(year, month) {
+    const totals = dailyTotals(year, month);
+    return Object.values(totals).reduce((sum, sec) => sum + sec, 0);
+  }
+
+  // 전체 공부한 날 수 (1초 이상 공부한 날만 카운트)
+  function totalStudyDays() {
+    const sessions = load().sessions;
+    // Set으로 날짜 중복 제거
+    const uniqueDates = new Set(sessions.map((s) => s.date));
+    return uniqueDates.size;
+  }
+
+  // 연속 공부일(streak) 계산
+  // 오늘부터 거슬러 올라가며 하루도 빠짐없이 공부한 날 수를 셉니다.
+  // 오늘 아직 공부 안 했으면 어제부터 시작해서 셉니다.
+  // (오늘 공부를 시작하지 않았다고 streak이 끊기면 억울하니까요)
+  function currentStreak() {
+    const today = new Date();
+    const todayKey = dateKey(today);
+    const todaySec = daySeconds(todayKey);
+
+    let streak = 0;
+    // 오늘 공부했으면 오늘(i=0)부터, 아직 안 했으면 어제(i=1)부터 시작
+    const startOffset = todaySec > 0 ? 0 : 1;
+
+    for (let i = startOffset; i < 365; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const key = dateKey(d);
+      if (daySeconds(key) > 0) {
+        streak++;
+      } else {
+        break; // 공부 안 한 날이 나오면 연속이 끊김
+      }
+    }
+    return streak;
+  }
+
   // 최근 N일간 하루 평균 공부 초를 계산합니다.
   // - 오늘 포함 최근 lookbackDays일 범위를 봅니다.
   // - 공부한 날(1초 이상)이 minDays일 미만이면 null을 반환합니다.
@@ -194,6 +237,9 @@ App.store = (function () {
     totalSeconds,
     daySeconds,
     dailyTotals,
+    monthSeconds,
+    totalStudyDays,
+    currentStreak,
     avgDailySeconds,
     exportJSON,
     importJSON,

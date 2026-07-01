@@ -59,6 +59,23 @@
 
       <p id="pg-eta" class="eta-text"></p>
 
+      <!-- 월간·전체 통계 + 연속 공부일 -->
+      <h2 class="sub">통계</h2>
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="stat-label">이번 달 공부</div>
+          <div id="pg-month" class="stat-value">0분</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">전체 공부일</div>
+          <div id="pg-study-days" class="stat-value">0일</div>
+        </div>
+        <div class="stat streak-card" id="pg-streak-card">
+          <div class="stat-label">연속 공부일 🔥</div>
+          <div id="pg-streak" class="stat-value">-</div>
+        </div>
+      </div>
+
       <h2 class="sub">최근 7일</h2>
       <div id="pg-week" class="week-chart"></div>
     </section>
@@ -110,6 +127,20 @@
       <div class="set-row">
         <label for="set-beep">완료음</label>
         <input id="set-beep" type="checkbox" class="switch" />
+      </div>
+      <!-- 완료음 종류 선택: 완료음이 켜져 있을 때만 의미 있음 -->
+      <div class="set-row">
+        <label for="set-beep-type">완료음 종류</label>
+        <select id="set-beep-type" class="set-select">
+          <option value="beep">삐삐 (기본)</option>
+          <option value="bell">맑은 종</option>
+          <option value="chime">차임</option>
+        </select>
+      </div>
+      <!-- 진동: 지원 기기에서만 표시 (id="set-vibrate-row") -->
+      <div id="set-vibrate-row" class="set-row">
+        <label for="set-vibrate">진동</label>
+        <input id="set-vibrate" type="checkbox" class="switch" />
       </div>
       <div class="set-row">
         <label for="set-awake">화면 켜두기</label>

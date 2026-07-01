@@ -30,13 +30,17 @@ if __package__ in (None, ""):
         extract_pdf, extract_xlsx, extract_xls, extract_odt, extract_hwpx, extract_hwp,
         ImagePdfError,
     )
-    from src.extractor import parse_filename, ParsedFilename, extract_deadlines
+    from src.extractor import (
+        parse_filename, ParsedFilename, extract_deadlines, build_notebook_entry,
+    )
 else:
     from .parsers import (
         extract_pdf, extract_xlsx, extract_xls, extract_odt, extract_hwpx, extract_hwp,
         ImagePdfError,
     )
-    from .extractor import parse_filename, ParsedFilename, extract_deadlines
+    from .extractor import (
+        parse_filename, ParsedFilename, extract_deadlines, build_notebook_entry,
+    )
 
 
 # 확장자 → 어떤 파서를 쓸지 연결한 표.
@@ -59,6 +63,7 @@ class ExtractResult:
     text: str = ""                                     # 본문 텍스트
     char_count: int = 0                                # 본문 글자 수
     deadline_info: dict = field(default_factory=dict)  # 마감일 추출 결과 (MVP-2)
+    notebook: dict = field(default_factory=dict)       # 교무수첩 카드 (MVP-3)
     ok: bool = False                                   # 성공 여부
     message: str = ""                                  # 실패/안내 메시지
 
@@ -106,6 +111,10 @@ def extract_file(path: str) -> ExtractResult:
         # 이미지 PDF: 실패가 아니라 '안내'로 취급합니다. (OCR 은 2차)
         result.ok = False
         result.message = str(e)
+        # 이미지 공문(포스터 등)도 교무수첩 카드는 만듭니다 → 보통 '배포형'.
+        result.notebook = build_notebook_entry(
+            result.filename_info, {}, extension, result.ok, result.message,
+        ).to_dict()
         return result
     except Exception as e:  # noqa: BLE001 - 사용자에게 친절한 메시지로 감싸 전달
         result.ok = False
@@ -124,6 +133,11 @@ def extract_file(path: str) -> ExtractResult:
 
     result.ok = True
     result.message = "추출 성공"
+
+    # ④ 교무수첩 카드 생성 (MVP-3) — 제목·발신·마감·성격을 한 카드로.
+    result.notebook = build_notebook_entry(
+        result.filename_info, result.deadline_info, extension, result.ok, result.message,
+    ).to_dict()
     return result
 
 
@@ -145,6 +159,9 @@ def _print_human(result: ExtractResult) -> None:
         print("  (공문 파일명 규칙에 맞지 않아 제목만 추출)")
         print(f"  · 제목     : {info.get('title')}")
     print("-" * 60)
+    if result.notebook:
+        _print_notebook_card(result.notebook)
+        print("-" * 60)
     if result.ok:
         _print_deadlines(result.deadline_info)
         print("-" * 60)
@@ -154,6 +171,27 @@ def _print_human(result: ExtractResult) -> None:
     else:
         print(f"[안내] {result.message}")
     print("=" * 60)
+
+
+def _print_notebook_card(card: dict) -> None:
+    """교무수첩 카드를 사람이 읽기 좋게 출력합니다 (MVP-3)."""
+    print("[교무수첩 카드]  ※ 성격·D-day 는 규칙 자동분류 — 부장이 조정 가능")
+    print(f"  · 제목     : {card.get('title')}")
+    print(f"  · 발신기관 : {card.get('sender')}  ({card.get('sender_level')})")
+    print(f"  · 문서번호 : {card.get('doc_number')}")
+    print(f"  · 공문성격 : ▣ {card.get('category')}  → {card.get('placement')}")
+    print(f"               ({card.get('category_reason')})")
+    print(f"  · 업무유형 : {card.get('task_type')}")
+    if card.get("deadline_iso"):
+        dtext = card.get("d_day_text", "")
+        print(f"  · 마감일   : [{card.get('deadline_label')}] "
+              f"{card.get('deadline_raw')}  《{dtext}》")
+        for od in card.get("other_deadlines", []):
+            print(f"               + [{od.get('label')}] {od.get('raw')}")
+    else:
+        print("  · 마감일   : 없음 (기한 없는 공문)")
+    if card.get("is_image"):
+        print("  · 비고     : 이미지 공문(포스터 등) — 본문·요약 불가, 원본 확인")
 
 
 def _meaningful_reference_dates(all_dates: list) -> list:

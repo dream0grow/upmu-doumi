@@ -46,13 +46,17 @@ def show(title, path):
         if di.get("has_deadline"):
             p = di["primary"]
             print(f"[마감일]  ★ [{p['label']}] {p['raw']}  ← 규칙으로 추출 (AI 아님)")
-            for d in di.get("all_dates", []):
-                if not d["is_deadline"] and d.get("keyword") not in ("문서처리일", "기간시작"):
-                    print(f"          · 참고 [{d['label']}] {d['raw']}")
         elif di.get("all_dates"):
             print("[마감일]  (액션 기한 없음 — 참고/행사 날짜만 있음)")
     else:
         print(f"[안내] {result.message}")
+
+    # 교무수첩 카드(MVP-3): 성격·D-day·업무유형
+    card = result.notebook
+    if card:
+        dd = f" 《{card.get('d_day_text')}》" if card.get("deadline_iso") else ""
+        print(f"[교무수첩] ▣ {card.get('category')} · {card.get('task_type')}"
+              f" · 발신 {card.get('sender_level')}{dd}  → {card.get('placement')}")
 
 
 def main():

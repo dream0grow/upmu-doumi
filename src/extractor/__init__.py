@@ -5,9 +5,15 @@ from .deadline_parser import (
     extract_deadlines, DeadlineResult, DateMention,
     LABEL_APPLY, LABEL_SUBMIT, LABEL_DEADLINE, LABEL_EVENT, LABEL_REFERENCE,
 )
+from .notebook import (
+    build_notebook_entry, NotebookEntry,
+    CATEGORY_TASK, CATEGORY_DISTRIBUTE, CATEGORY_REFERENCE, CATEGORY_RULE,
+)
 
 __all__ = [
     "parse_filename", "ParsedFilename",
     "extract_deadlines", "DeadlineResult", "DateMention",
     "LABEL_APPLY", "LABEL_SUBMIT", "LABEL_DEADLINE", "LABEL_EVENT", "LABEL_REFERENCE",
+    "build_notebook_entry", "NotebookEntry",
+    "CATEGORY_TASK", "CATEGORY_DISTRIBUTE", "CATEGORY_REFERENCE", "CATEGORY_RULE",
 ]

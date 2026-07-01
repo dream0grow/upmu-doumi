@@ -11,20 +11,22 @@
 ## 개발 순서
 - [x] **MVP-1** 파일에서 텍스트 추출 (5형식 + 파일명 파싱)
 - [x] **MVP-2** 마감일 규칙 추출 + 라벨 구분(신청기한/제출기한/행사일)
-- [x] **MVP-3** 교무수첩 항목 생성 (제목·발신·마감·4성격·D-day 자동) ← **현재 완료**
-- [ ] MVP-4 AI 요약·할일 (Ollama, 근거표시 프롬프트)
+- [x] **MVP-3** 교무수첩 항목 생성 (제목·발신·마감·4성격·D-day 자동)
+- [x] **MVP-4** AI 요약·할일 (Ollama 연동, 근거표시 프롬프트) ← **현재 완료**
 - [ ] MVP-5 홈 대시보드 (공문 4성격 자동 배치)
 
 ## 코드 위치
 - `src/parsers/` — 형식별 본문 파서 (pdf·hwp·hwpx·odt·xlsx·xls)
 - `src/extractor/` — 규칙 기반 추출: `filename_parser`(파일명), `deadline_parser`(마감일), `notebook`(교무수첩 카드)
-- `src/extract.py` — 텍스트·마감일·교무수첩 총괄 + 명령줄 입구
-- `docs/파싱규칙.md`·`docs/마감일규칙.md`·`docs/교무수첩규칙.md` — 규칙 상세
+- `src/ai/` — 로컬 LLM(Ollama) 연동: `prompt`(근거표시), `ollama_client`, `summarizer`(요약·할일)
+- `src/extract.py` — 텍스트·마감일·교무수첩·AI 총괄 + 명령줄 입구
+- `docs/파싱규칙.md`·`docs/마감일규칙.md`·`docs/교무수첩규칙.md`·`docs/AI규칙.md` — 규칙 상세
 
 ## 세부 문서
 - 파싱: `docs/파싱규칙.md`
 - 마감일: `docs/마감일규칙.md`
 - 교무수첩: `docs/교무수첩규칙.md`
+- AI(요약·할일): `docs/AI규칙.md`
 - 실행법·설치: `README.md`
 
 > 개발자는 현직 교사이며 코딩 학습 중입니다. 코드는 친절한 한국어 주석과 함께 작성합니다.

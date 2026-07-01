@@ -33,6 +33,7 @@ if __package__ in (None, ""):
     from src.extractor import (
         parse_filename, ParsedFilename, extract_deadlines, build_notebook_entry,
     )
+    from src.ai import summarize
 else:
     from .parsers import (
         extract_pdf, extract_xlsx, extract_xls, extract_odt, extract_hwpx, extract_hwp,
@@ -41,6 +42,7 @@ else:
     from .extractor import (
         parse_filename, ParsedFilename, extract_deadlines, build_notebook_entry,
     )
+    from .ai import summarize
 
 
 # 확장자 → 어떤 파서를 쓸지 연결한 표.
@@ -64,6 +66,7 @@ class ExtractResult:
     char_count: int = 0                                # 본문 글자 수
     deadline_info: dict = field(default_factory=dict)  # 마감일 추출 결과 (MVP-2)
     notebook: dict = field(default_factory=dict)       # 교무수첩 카드 (MVP-3)
+    ai: dict = field(default_factory=dict)             # AI 요약·할일 제안 (MVP-4)
     ok: bool = False                                   # 성공 여부
     message: str = ""                                  # 실패/안내 메시지
 
@@ -77,8 +80,14 @@ def _sanitize(text: str) -> str:
     return text.encode("utf-8", "ignore").decode("utf-8")
 
 
-def extract_file(path: str) -> ExtractResult:
-    """파일 1개를 받아 파일명 정보 + 본문 텍스트를 뽑습니다."""
+def extract_file(path: str, with_ai: bool = False, ai_model: Optional[str] = None,
+                 generate_fn=None) -> ExtractResult:
+    """
+    파일 1개를 받아 파일명·본문·마감일·교무수첩 카드를 뽑습니다.
+
+    with_ai=True 이면 로컬 Ollama 로 요약·할일도 제안합니다(느릴 수 있음, 선택).
+    generate_fn 을 주면 그 함수로 LLM 을 호출합니다(테스트용).
+    """
     if not os.path.isfile(path):
         return ExtractResult(
             file_path=path, ok=False,
@@ -138,6 +147,15 @@ def extract_file(path: str) -> ExtractResult:
     result.notebook = build_notebook_entry(
         result.filename_info, result.deadline_info, extension, result.ok, result.message,
     ).to_dict()
+
+    # ⑤ AI 요약·할일 제안 (MVP-4, 선택) — 로컬 Ollama. 규칙 결과와 별개의 '참고 제안'.
+    if with_ai or generate_fn is not None:
+        title = (result.filename_info or {}).get("title") or ""
+        kwargs = {"title": title, "generate_fn": generate_fn}
+        if ai_model:
+            kwargs["model"] = ai_model
+        result.ai = summarize(text, **kwargs).to_dict()
+
     return result
 
 
@@ -165,12 +183,37 @@ def _print_human(result: ExtractResult) -> None:
     if result.ok:
         _print_deadlines(result.deadline_info)
         print("-" * 60)
+        if result.ai:
+            _print_ai(result.ai)
+            print("-" * 60)
         print(f"[본문 텍스트]  글자 수: {result.char_count}")
         print()
         print(result.text)
     else:
         print(f"[안내] {result.message}")
     print("=" * 60)
+
+
+def _print_ai(ai: dict) -> None:
+    """AI 요약·할일 제안을 출력합니다 (MVP-4)."""
+    print("[AI 제안]  ⚠ " + ai.get("notice", ""))
+    if not ai.get("available"):
+        print(f"  · {ai.get('message', 'AI 사용 불가')}")
+        return
+    print(f"  · 모델: {ai.get('model')}")
+    if ai.get("summary"):
+        print(f"  · 한 줄 요약: {ai['summary']}")
+        if ai.get("summary_evidence"):
+            print(f"      [근거: {ai['summary_evidence']}]")
+    tasks = ai.get("tasks", [])
+    if tasks:
+        print("  · 해야 할 일(제안):")
+        for i, t in enumerate(tasks, 1):
+            print(f"      {i}. {t.get('text')}")
+            if t.get("evidence"):
+                print(f"         [근거: {t['evidence']}]")
+    if ai.get("message"):
+        print(f"  · 참고: {ai['message']}")
 
 
 def _print_notebook_card(card: dict) -> None:
@@ -242,13 +285,17 @@ def _print_deadlines(info: dict) -> None:
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
-        description="공문 파일 1개에서 텍스트를 뽑습니다 (교무부장 도우미 MVP-1).",
+        description="공문 파일 1개에서 텍스트·마감일·교무수첩 카드를 뽑습니다 (교무부장 도우미).",
     )
-    parser.add_argument("path", help="공문 파일 경로 (pdf/hwp/hwpx/odt/xlsx)")
+    parser.add_argument("path", help="공문 파일 경로 (pdf/hwp/hwpx/odt/xlsx/xls)")
     parser.add_argument("--json", action="store_true", help="결과를 JSON 으로 출력")
+    parser.add_argument("--ai", action="store_true",
+                        help="로컬 Ollama 로 요약·할일도 제안 (Ollama 실행 필요, 느릴 수 있음)")
+    parser.add_argument("--model", default=None,
+                        help="AI 모델 이름 (기본 qwen2.5:3b)")
     args = parser.parse_args(argv)
 
-    result = extract_file(args.path)
+    result = extract_file(args.path, with_ai=args.ai, ai_model=args.model)
 
     if args.json:
         print(json.dumps(result.to_dict(), ensure_ascii=False, indent=2))

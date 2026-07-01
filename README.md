@@ -100,7 +100,24 @@ python -m pytest
 └─ requirements-dev.txt    테스트에만 필요한 라이브러리
 ```
 
+## AI 요약·할일 (MVP-4, 선택) — 로컬 Ollama
+
+규칙으로 못 하는 **요약·할 일 제안**은 로컬 LLM(Ollama)이 돕습니다.
+**Ollama 는 선생님 PC 안에서만 돌며, 공문이 PC 밖으로 나가지 않습니다.**
+
+```bash
+# 선생님 PC 준비 (딱 두 번)
+#   1) https://ollama.com 에서 Ollama 설치
+#   2) ollama pull qwen2.5:3b
+
+python -m src.extract "공문파일.hwp" --ai        # 규칙 결과 + AI 제안
+python verify_ai.py "공문파일.hwp"                # 실제 Ollama로 검증
+```
+
+- 각 항목에 **[근거: 공문 해당 부분]**을 붙여 환각을 즉시 발각합니다.
+- AI 출력엔 항상 "확인 필요" 표시. **마감일·기관명은 AI가 아니라 규칙이 정답.**
+- Ollama 가 없어도 크래시하지 않고, 규칙 결과(마감일·성격)는 그대로 나옵니다.
+
 ## 다음 단계 (설계서 개발 순서)
 
-- **MVP-4**: AI 요약·할일 (Ollama 연동, 근거표시 프롬프트) ← 여기서 로컬 LLM 등장
 - **MVP-5**: 홈 대시보드 (공문 4성격 자동 배치)

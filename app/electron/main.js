@@ -1,9 +1,14 @@
 // Electron 메인 프로세스.
 // - 창을 만들고 React 화면을 로드
 // - SQLite(카드 저장) + 파이썬 엔진(추출) IPC 핸들러 등록
-// - 절대 원칙: 클라우드 API 금지, 개인정보 비저장. 외부 네트워크 호출 없음.
+// - 절대 원칙: 공문 원문·개인정보는 PC 밖으로 안 나감. 처리는 전부 로컬.
+//   (개인정보 아닌 의견·분류 수정 내역만, 사용자가 '보내기'를 눌렀을 때 전송)
 const { app, BrowserWindow, ipcMain, shell } = require("electron");
 const path = require("node:path");
+const fs = require("node:fs");
+
+// 의견·분류 개선 데이터를 받을 관리자 메일 (환경변수로 바꿀 수 있음)
+const ADMIN_EMAIL = process.env.GYOMU_ADMIN_EMAIL || "leehg0211@gmail.com";
 const db = require("./db");
 const engine = require("./engine");
 const { loadSeed } = require("./seed");
@@ -81,12 +86,69 @@ function registerIpc() {
   });
 
   // 파일 추출 (파이썬 엔진 자식 프로세스). 결과에 quadrant 를 붙여 반환.
+  // ★ 로컬 학습: 같은 제목을 부장이 이전에 고쳐 뒀으면 그 분류를 우선 적용.
   ipcMain.handle("engine:extract", async (_e, { filePath, withAi }) => {
     const result = await engine.extractFile(filePath, !!withAi);
     if (result && result.notebook) {
+      const learned = db.findClassOverride(result.notebook.title);
+      if (learned) {
+        result.notebook.category = learned.category;
+        result.notebook.owner = learned.owner;
+        result.notebook.category_reason =
+          "부장이 이전에 직접 고친 분류를 적용 (로컬 학습)";
+      }
       result.notebook.quadrant = eisenhower(result.notebook);
     }
     return result;
+  });
+
+  // ── 의견 보내기 (불편·문의·아이디어 + 분류 수정 내역) ──
+  ipcMain.handle("feedback:add", (_e, { kind, text }) => db.addFeedback(kind, text));
+  ipcMain.handle("feedback:list", () => db.listFeedback());
+  ipcMain.handle("feedback:remove", (_e, { id }) => {
+    db.removeFeedback(id);
+    return true;
+  });
+
+  // 보낼 내용 미리보기 (사용자가 눈으로 확인한 뒤에만 보냄)
+  ipcMain.handle("feedback:preview", () => db.collectOutbox());
+
+  // '보내기': ① JSON 파일로 저장(폴더 열어줌) ② 메일 창을 미리 채워 열어줌.
+  // 앱이 몰래 전송하지 않습니다 — 마지막 전송 버튼은 사용자가 메일에서 누릅니다.
+  ipcMain.handle("feedback:send", () => {
+    const outbox = db.collectOutbox();
+    const n = outbox.feedback.length + outbox.corrections.length;
+    if (n === 0) return { ok: false, message: "보낼 내용이 없습니다." };
+
+    // ① 전체 데이터를 JSON 파일로 (메일에 첨부하기 좋게)
+    const dir = path.join(app.getPath("userData"), "outbox");
+    fs.mkdirSync(dir, { recursive: true });
+    const stamp = new Date().toISOString().slice(0, 10);
+    const file = path.join(dir, `교무도우미-의견-${stamp}.json`);
+    fs.writeFileSync(file, JSON.stringify(outbox, null, 2), "utf-8");
+    shell.showItemInFolder(file);
+
+    // ② 메일 초안 (본문은 요약 — 전체는 첨부 파일로 안내)
+    const lines = [
+      "[교무부장 도우미] 사용 의견 + 분류 수정 내역입니다.",
+      "",
+      `- 의견 ${outbox.feedback.length}건`,
+      ...outbox.feedback.slice(0, 5).map((f) => `  · (${f.kind}) ${f.text.slice(0, 80)}`),
+      `- 분류 수정 ${outbox.corrections.length}건`,
+      ...outbox.corrections.slice(0, 5).map(
+        (c) => `  · "${(c.card_title || "").slice(0, 40)}" ${c.old_category}→${c.new_category}`
+      ),
+      "",
+      "※ 전체 내용은 방금 열린 폴더의 JSON 파일을 첨부해 주세요.",
+    ];
+    const mailto =
+      `mailto:${ADMIN_EMAIL}` +
+      `?subject=${encodeURIComponent("[교무부장 도우미] 사용 의견")}` +
+      `&body=${encodeURIComponent(lines.join("\n"))}`;
+    shell.openExternal(mailto);
+
+    db.markFeedbackSent();
+    return { ok: true, file, count: n };
   });
 
   // 원본 파일 열기 (OS 기본 프로그램)

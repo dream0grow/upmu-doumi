@@ -100,6 +100,33 @@ export interface Todo {
   created_at: string;
 }
 
+// 사용자 의견 (불편·문의·아이디어) — 보내기 전까지 로컬 보관.
+export type FeedbackKind = "불편" | "문의" | "아이디어" | "분류문제";
+
+export interface Feedback {
+  id: number;
+  kind: FeedbackKind;
+  text: string;
+  sent: boolean;
+  created_at: string;
+}
+
+// 분류 수정 내역 (제목 수준 — 개인정보 아님)
+export interface ClassCorrection {
+  id: number;
+  card_title: string | null;
+  old_category: string | null;
+  new_category: string | null;
+  old_owner: string | null;
+  new_owner: string | null;
+  created_at: string;
+}
+
+export interface Outbox {
+  feedback: Feedback[];
+  corrections: ClassCorrection[];
+}
+
 // 상단 요약 띠 수치.
 export interface Summary {
   total: number;
@@ -123,6 +150,11 @@ export interface GyomuApi {
   toggleTodo(id: number, done: boolean): Promise<void>;
   updateTodo(id: number, text: string, priority: TodoPriority): Promise<void>;
   removeTodo(id: number): Promise<void>;
+  addFeedback(kind: FeedbackKind, text: string): Promise<number>;
+  listFeedback(): Promise<Feedback[]>;
+  removeFeedback(id: number): Promise<void>;
+  previewOutbox(): Promise<Outbox>;
+  sendFeedback(): Promise<{ ok: boolean; file?: string; count?: number; message?: string }>;
 }
 
 declare global {

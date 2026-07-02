@@ -29,4 +29,11 @@ contextBridge.exposeInMainWorld("gyomu", {
   updateTodo: (id, text, priority) =>
     ipcRenderer.invoke("todos:update", { id, text, priority }),
   removeTodo: (id) => ipcRenderer.invoke("todos:remove", { id }),
+
+  // ── 의견 보내기 (개인정보 없는 의견·분류 수정 내역만) ──
+  addFeedback: (kind, text) => ipcRenderer.invoke("feedback:add", { kind, text }),
+  listFeedback: () => ipcRenderer.invoke("feedback:list"),
+  removeFeedback: (id) => ipcRenderer.invoke("feedback:remove", { id }),
+  previewOutbox: () => ipcRenderer.invoke("feedback:preview"),
+  sendFeedback: () => ipcRenderer.invoke("feedback:send"),
 });

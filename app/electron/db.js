@@ -55,6 +55,26 @@ function initDb(userDataDir) {
       card_id INTEGER,               -- 공문에서 만든 투두면 연결 (없으면 NULL)
       created_at TEXT DEFAULT (datetime('now'))
     );
+    -- 부장이 분류를 직접 고친 기록 (제목 수준 — 개인정보 아님).
+    -- ① 같은 제목의 공문이 다시 오면 고친 분류를 우선 적용 (로컬 학습)
+    -- ② '의견 보내기'로 관리자에게 보내면 규칙 개선 재료가 됨
+    CREATE TABLE IF NOT EXISTS class_feedback (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      card_title TEXT,
+      old_category TEXT,
+      new_category TEXT,
+      old_owner TEXT,
+      new_owner TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+    -- 사용자가 남기는 불편·문의·아이디어 (보내기 전까지 로컬 보관).
+    CREATE TABLE IF NOT EXISTS feedback (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      kind TEXT DEFAULT '불편',      -- 불편 / 문의 / 아이디어 / 분류문제
+      text TEXT NOT NULL,
+      sent INTEGER DEFAULT 0,        -- 관리자에게 보냈는지
+      created_at TEXT DEFAULT (datetime('now'))
+    );
   `);
   migrate();
   return db;
@@ -172,11 +192,32 @@ function setCardDone(id, done) {
 }
 
 // 부장이 직접 성격·처리주체를 고칩니다 (자동 분류가 틀렸을 때).
-// 수정 이력은 분류 근거에 남겨서, 나중에 규칙 개선 재료로 씁니다.
+// 수정 이력은 class_feedback 에 남겨 ① 로컬 학습 ② 규칙 개선 재료로 씁니다.
 function updateCardClass(id, category, owner) {
+  const before = db.prepare(
+    "SELECT title, category, owner FROM cards WHERE id = ?"
+  ).get(id);
+  if (before && (before.category !== category || (before.owner ?? null) !== (owner ?? null))) {
+    db.prepare(`
+      INSERT INTO class_feedback
+        (card_title, old_category, new_category, old_owner, new_owner)
+      VALUES (?, ?, ?, ?, ?)
+    `).run(before.title, before.category, category,
+           before.owner ?? null, owner ?? null);
+  }
   db.prepare(
     "UPDATE cards SET category = ?, owner = ?, category_reason = ? WHERE id = ?"
   ).run(category, owner ?? null, "부장이 직접 수정 (자동 분류 아님)", id);
+}
+
+// 같은 제목의 공문에 대해 부장이 고쳐 둔 분류가 있으면 돌려줍니다 (로컬 학습).
+function findClassOverride(title) {
+  if (!title) return null;
+  return db.prepare(`
+    SELECT new_category AS category, new_owner AS owner
+    FROM class_feedback WHERE card_title = ?
+    ORDER BY id DESC LIMIT 1
+  `).get(title) || null;
 }
 
 function count() {
@@ -228,8 +269,39 @@ function removeTodo(id) {
   db.prepare("DELETE FROM todos WHERE id = ?").run(id);
 }
 
+// ── 의견 보내기 (불편·문의·아이디어) ───────────────────────
+function addFeedback(kind, text) {
+  return db.prepare("INSERT INTO feedback (kind, text) VALUES (?, ?)")
+    .run(kind || "불편", text).lastInsertRowid;
+}
+
+function listFeedback() {
+  return db.prepare("SELECT * FROM feedback ORDER BY id DESC").all()
+    .map((r) => ({
+      id: r.id, kind: r.kind, text: r.text,
+      sent: !!r.sent, created_at: r.created_at,
+    }));
+}
+
+function removeFeedback(id) {
+  db.prepare("DELETE FROM feedback WHERE id = ?").run(id);
+}
+
+// '보내기'에 담을 내용: 아직 안 보낸 의견 + 분류 수정 내역 전체.
+// (공문 제목 수준까지만 — 원문·개인정보는 절대 포함하지 않음)
+function collectOutbox() {
+  const feedback = db.prepare("SELECT * FROM feedback WHERE sent = 0 ORDER BY id").all();
+  const corrections = db.prepare("SELECT * FROM class_feedback ORDER BY id").all();
+  return { feedback, corrections };
+}
+
+function markFeedbackSent() {
+  db.prepare("UPDATE feedback SET sent = 1 WHERE sent = 0").run();
+}
+
 module.exports = {
   initDb, listCards, insertCard, updateQuadrant, setCardDone, updateCardClass,
-  count, seedCards,
+  findClassOverride, count, seedCards,
   listTodos, addTodo, toggleTodo, updateTodo, removeTodo,
+  addFeedback, listFeedback, removeFeedback, collectOutbox, markFeedbackSent,
 };

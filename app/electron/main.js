@@ -34,9 +34,29 @@ function registerIpc() {
   // 저장된 카드 목록
   ipcMain.handle("cards:list", () => db.listCards());
 
-  // 드래그 이동 결과 저장
+  // 드래그 이동 결과 저장 (구 아이젠하워 — 남겨둠)
   ipcMain.handle("cards:updateQuadrant", (_e, { id, quadrant }) => {
     db.updateQuadrant(id, quadrant);
+    return true;
+  });
+
+  // 카드 처리 완료/해제
+  ipcMain.handle("cards:setDone", (_e, { id, done }) => {
+    db.setCardDone(id, done);
+    return true;
+  });
+
+  // ── 투두리스트 (홈에서 바로 작성, 중요도 태그) ──
+  ipcMain.handle("todos:list", () => db.listTodos());
+  ipcMain.handle("todos:add", (_e, { text, priority, cardId }) =>
+    db.addTodo(text, priority, cardId)
+  );
+  ipcMain.handle("todos:toggle", (_e, { id, done }) => {
+    db.toggleTodo(id, done);
+    return true;
+  });
+  ipcMain.handle("todos:remove", (_e, { id }) => {
+    db.removeTodo(id);
     return true;
   });
 

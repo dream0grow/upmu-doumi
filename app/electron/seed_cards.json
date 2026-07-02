@@ -6,9 +6,9 @@
     "kind": "본문",
     "extension": "odt",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "행사/사업",
     "deadline_iso": "2026-07-21",
     "deadline_label": "제출기한",
@@ -19,7 +19,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": "담임(공람)"
   },
   {
     "title": "(제출서류)현장체험학습 우수사례 공모전 출품 서류 양식",
@@ -28,9 +29,9 @@
     "kind": "첨부",
     "extension": "hwpx",
     "sender_level": "상급기관",
-    "category": "배포형",
-    "category_reason": "제목에 배포성 키워드 → 배포형",
-    "placement": "배포함(대상 지정)",
+    "category": "할일형",
+    "category_reason": "보고·제출·조사 → 반드시 처리해야 하는 할일형",
+    "placement": "교무수첩 상단(할 일·D-day)",
     "task_type": "행사/사업",
     "deadline_iso": null,
     "deadline_label": null,
@@ -41,7 +42,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": "부장"
   },
   {
     "title": "2026년 현장체험학습 우수 사례 공모전 개최 계획",
@@ -63,7 +65,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[제출_교데통_공문]2026학년도 상반기 장기 미인정결석 학생 관리 현황 자료 제출",
@@ -73,7 +76,7 @@
     "extension": "odt",
     "sender_level": "상급기관",
     "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
+    "category_reason": "보고·제출·조사 → 반드시 처리해야 하는 할일형",
     "placement": "교무수첩 상단(할 일·D-day)",
     "task_type": "보고/제출",
     "deadline_iso": "2026-06-30",
@@ -96,7 +99,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "급함+중요"
+    "quadrant": "급함+중요",
+    "owner": "부장"
   },
   {
     "title": "[붙임1] 2026학년도 상반기 장기 미인정결석 학생 정기점검 계획(최종 안내용)",
@@ -106,7 +110,7 @@
     "extension": "hwpx",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "보고/제출",
     "deadline_iso": null,
@@ -118,7 +122,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[붙임2] 2026학년도 상반기 장기 미인정결석 학생 정기 점검 QA",
@@ -128,7 +133,7 @@
     "extension": "hwpx",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "보고/제출",
     "deadline_iso": null,
@@ -140,7 +145,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[붙임3] 장기미인정결석 학생 정기점검 결과 작성 요령",
@@ -150,7 +156,7 @@
     "extension": "hwpx",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "보고/제출",
     "deadline_iso": null,
@@ -162,7 +168,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "서식1. (초중고 작성용) 2026학년도 상반기 장기미인정결석학생 정기점검 결과 보고",
@@ -171,9 +178,9 @@
     "kind": "첨부",
     "extension": "xlsx",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
+    "placement": "자료실 보관",
     "task_type": "보고/제출",
     "deadline_iso": "2026-07-10",
     "deadline_label": "제출기한",
@@ -205,7 +212,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": null
   },
   {
     "title": "서식2. (초등교육과 작성용) 2026학년도 상반기 유치원 장기 미인정결석학생 정기점검 결과 보고",
@@ -214,9 +222,9 @@
     "kind": "첨부",
     "extension": "xlsx",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
+    "placement": "자료실 보관",
     "task_type": "보고/제출",
     "deadline_iso": "2026-07-24",
     "deadline_label": "제출기한",
@@ -227,7 +235,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": null
   },
   {
     "title": "서식3. (특수학교 및 중등교육과 작성용) 2026학년도 상반기 장기미인정결석 학생 정기점검 결과 보고",
@@ -237,7 +246,7 @@
     "extension": "xlsx",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "보고/제출",
     "deadline_iso": null,
@@ -249,7 +258,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[공모_교데통] 제20회 교육감배 전도학교스포츠클럽축전 개최 요강 및 참가신청 안내",
@@ -258,9 +268,9 @@
     "kind": "본문",
     "extension": "odt",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "행사/사업",
     "deadline_iso": "2026-07-23",
     "deadline_label": "신청기한",
@@ -277,7 +287,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": "담임(공람)"
   },
   {
     "title": "[참고] 제19회 전국학교스포츠클럽 축전 종목별 대회 참가요강",
@@ -299,7 +310,8 @@
     "stale_dropped": 8,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "제20회 교육감배 전도학교스포츠클럽 축전 참가학생 신분확인 보조자료",
@@ -321,7 +333,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "제20회 교육감배 전도학교스포츠클럽축전 참가 계획서 및 참가신청서",
@@ -330,9 +343,9 @@
     "kind": "첨부",
     "extension": "xls",
     "sender_level": "상급기관",
-    "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
-    "placement": "자료실 보관",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "행사/사업",
     "deadline_iso": null,
     "deadline_label": null,
@@ -343,7 +356,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": "담임(공람)"
   },
   {
     "title": "제20회 교육감배 전도학교스포츠클럽축전 참가요강(최종)",
@@ -376,7 +390,8 @@
     "stale_dropped": 16,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": "부장"
   },
   {
     "title": "_2026 토양·지하수 어린이 여름캠프_ 개최 알림 및 홍보 협조 요청",
@@ -385,9 +400,9 @@
     "kind": "본문",
     "extension": "odt",
     "sender_level": "단체/기타",
-    "category": "배포형",
-    "category_reason": "제목에 배포성 키워드 → 배포형",
-    "placement": "배포함(대상 지정)",
+    "category": "할일형",
+    "category_reason": "참석·협조 요청 → 부장이 직접 처리할 할일형",
+    "placement": "교무수첩 상단(할 일·D-day)",
     "task_type": "행사/사업",
     "deadline_iso": null,
     "deadline_label": null,
@@ -398,7 +413,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": "부장"
   },
   {
     "title": "붙임 '2026 토양지하수 어린이 여름캠프' 포스터 및 안내",
@@ -407,9 +423,9 @@
     "kind": "첨부",
     "extension": "pdf",
     "sender_level": "단체/기타",
-    "category": "배포형",
-    "category_reason": "이미지 공문(포스터 등) → 배포형",
-    "placement": "배포함(대상 지정)",
+    "category": "참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
+    "placement": "자료실 보관",
     "task_type": "행사/사업",
     "deadline_iso": null,
     "deadline_label": null,
@@ -420,7 +436,8 @@
     "stale_dropped": 0,
     "is_image": true,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[연수_공문] 2026년 전국초등교원체육연수 신청 안내",
@@ -429,9 +446,9 @@
     "kind": "본문",
     "extension": "odt",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "연수/교육",
     "deadline_iso": "2026-07-03",
     "deadline_label": "신청기한",
@@ -442,7 +459,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "급함+중요"
+    "quadrant": "급함+중요",
+    "owner": "담임(공람)"
   },
   {
     "title": "1. 2026년 전국초등교원체육연수 계획",
@@ -451,9 +469,9 @@
     "kind": "첨부",
     "extension": "hwp",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "연수/교육",
     "deadline_iso": "2026-07-29",
     "deadline_label": "신청기한",
@@ -464,7 +482,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": "담임(공람)"
   },
   {
     "title": "2. 연수 신청 서식",
@@ -473,9 +492,9 @@
     "kind": "첨부",
     "extension": "xlsx",
     "sender_level": "상급기관",
-    "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
-    "placement": "자료실 보관",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "연수/교육",
     "deadline_iso": null,
     "deadline_label": null,
@@ -486,7 +505,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": "담임(공람)"
   },
   {
     "title": "3. 교원직무연수신청서(서식)",
@@ -495,9 +515,9 @@
     "kind": "첨부",
     "extension": "hwp",
     "sender_level": "상급기관",
-    "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
-    "placement": "자료실 보관",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "연수/교육",
     "deadline_iso": null,
     "deadline_label": null,
@@ -508,7 +528,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": "담임(공람)"
   },
   {
     "title": "4. 개인정보수집이용 및 제공동의서(서식)",
@@ -530,7 +551,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[연수_교데통_제출]2026학년도 유아 정서·심리 지원 교원 역량강화 연수 안내 및 신청 협조",
@@ -540,7 +562,7 @@
     "extension": "odt",
     "sender_level": "상급기관",
     "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
+    "category_reason": "보고·제출·조사 → 반드시 처리해야 하는 할일형",
     "placement": "교무수첩 상단(할 일·D-day)",
     "task_type": "연수/교육",
     "deadline_iso": "2026-07-07",
@@ -552,7 +574,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": "부장"
   },
   {
     "title": "2026년 유아 정서·심리 지원 교원 역량강화 연수 계획",
@@ -561,9 +584,9 @@
     "kind": "첨부",
     "extension": "hwp",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "연수/교육",
     "deadline_iso": "2026-07-07",
     "deadline_label": "신청기한",
@@ -580,7 +603,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": "담임(공람)"
   },
   {
     "title": "[제출_교데통] 여름철 폭염 대비 학교 자체 점검 실시 및 대응 실적 제출",
@@ -590,7 +614,7 @@
     "extension": "odt",
     "sender_level": "상급기관",
     "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
+    "category_reason": "보고·제출·조사 → 반드시 처리해야 하는 할일형",
     "placement": "교무수첩 상단(할 일·D-day)",
     "task_type": "보고/제출",
     "deadline_iso": "2026-06-30",
@@ -602,7 +626,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "급함+중요"
+    "quadrant": "급함+중요",
+    "owner": "부장"
   },
   {
     "title": "(붙임1) 학교 폭염 대응 자체점검표(학교 제출)",
@@ -612,7 +637,7 @@
     "extension": "hwpx",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "보고/제출",
     "deadline_iso": null,
@@ -624,7 +649,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "(붙임2) 학교 폭염 대응 실적 서식(본청 부서 및 지원청 제출)",
@@ -634,7 +660,7 @@
     "extension": "hwpx",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "보고/제출",
     "deadline_iso": null,
@@ -646,7 +672,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[제출] 2027학년도 초등학교 통학구역 조정을 위한 사전 의견 수렴 협조 요청",
@@ -656,7 +683,7 @@
     "extension": "odt",
     "sender_level": "상급기관",
     "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
+    "category_reason": "참석·협조 요청 → 부장이 직접 처리할 할일형",
     "placement": "교무수첩 상단(할 일·D-day)",
     "task_type": "보고/제출",
     "deadline_iso": "2026-07-16",
@@ -668,7 +695,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": "부장"
   },
   {
     "title": "(붙임1) 2027학년도 초등학교 통학구역 조정 추진 계획_최종",
@@ -677,9 +705,9 @@
     "kind": "첨부",
     "extension": "hwp",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
+    "placement": "자료실 보관",
     "task_type": "기타",
     "deadline_iso": "2026-07-16",
     "deadline_label": "제출기한",
@@ -690,7 +718,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": null
   },
   {
     "title": "(붙임2) 2026학년도 초등학교 통학구역",
@@ -700,7 +729,7 @@
     "extension": "hwp",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "기타",
     "deadline_iso": null,
@@ -712,7 +741,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[신청_교데통] 2026 다문화교육 지원교사 역량강화 연수 참가 신청 안내",
@@ -721,9 +751,9 @@
     "kind": "본문",
     "extension": "odt",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "연수/교육",
     "deadline_iso": "2026-07-02",
     "deadline_label": "신청기한",
@@ -740,7 +770,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "급함+중요"
+    "quadrant": "급함+중요",
+    "owner": "담임(공람)"
   },
   {
     "title": "2026 다문화교육 지원교사 역걍강화 연수 참가 신청서",
@@ -749,9 +780,9 @@
     "kind": "첨부",
     "extension": "hwp",
     "sender_level": "상급기관",
-    "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
-    "placement": "자료실 보관",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "연수/교육",
     "deadline_iso": null,
     "deadline_label": null,
@@ -762,7 +793,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": "담임(공람)"
   },
   {
     "title": "2026 다문화교육 지원교사 역량강화 연수 운영 계획",
@@ -771,9 +803,9 @@
     "kind": "첨부",
     "extension": "hwp",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "연수/교육",
     "deadline_iso": "2026-07-02",
     "deadline_label": "신청기한",
@@ -784,7 +816,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "급함+중요"
+    "quadrant": "급함+중요",
+    "owner": "담임(공람)"
   },
   {
     "title": "[제출_교데통] 교육부 특별교부금(초등학교 체육활동 여건 개선 지원) 추가 수요조사 실시",
@@ -794,7 +827,7 @@
     "extension": "odt",
     "sender_level": "상급기관",
     "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
+    "category_reason": "보고·제출·조사 → 반드시 처리해야 하는 할일형",
     "placement": "교무수첩 상단(할 일·D-day)",
     "task_type": "보고/제출",
     "deadline_iso": "2026-07-06",
@@ -806,7 +839,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": "부장"
   },
   {
     "title": "(서식) 초등학교 체육활동 여건 개선 지원 사업 수요조사(학교명)_2차조사",
@@ -816,7 +850,7 @@
     "extension": "xlsx",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "보고/제출",
     "deadline_iso": null,
@@ -828,7 +862,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "(참고) 초등학교 체육활동 여건 개선 지원 사업 개요",
@@ -850,7 +885,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[연수_안내] 2026년 7,8월 수학교육 역량강화 직무연수 운영 및 신청 안내",
@@ -859,9 +895,9 @@
     "kind": "본문",
     "extension": "odt",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "연수/교육",
     "deadline_iso": "2026-07-07",
     "deadline_label": "신청기한",
@@ -872,7 +908,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": "담임(공람)"
   },
   {
     "title": "2026년 7,8월 수학교육 역량강화 직무연수 운영 및 신청 안내",
@@ -881,9 +918,9 @@
     "kind": "첨부",
     "extension": "hwpx",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "연수/교육",
     "deadline_iso": "2026-07-07",
     "deadline_label": "신청기한",
@@ -894,7 +931,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "안급하지만 중요"
+    "quadrant": "안급하지만 중요",
+    "owner": "담임(공람)"
   },
   {
     "title": "국가공무원법 및 국가공무원 복무·징계에 관한 예규 개정 사항 안내(2026. 6. 23 시행)",
@@ -916,7 +954,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "국가공무원 복무·징계 관련 예규 개정",
@@ -938,7 +977,8 @@
     "stale_dropped": 1,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "국가공무원 복무규정 일부개정령",
@@ -960,7 +1000,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[제출_독서로]2026년 학교도서관 현황조사 실시 안내 및 협조 요청",
@@ -969,9 +1010,9 @@
     "kind": "본문",
     "extension": "odt",
     "sender_level": "상급기관",
-    "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
-    "placement": "자료실 보관",
+    "category": "할일형",
+    "category_reason": "참석·협조 요청 → 부장이 직접 처리할 할일형",
+    "placement": "교무수첩 상단(할 일·D-day)",
     "task_type": "보고/제출",
     "deadline_iso": null,
     "deadline_label": null,
@@ -982,7 +1023,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": "부장"
   },
   {
     "title": "붙임 1. 2026년 학교도서관 현황조사 추진계획",
@@ -992,7 +1034,7 @@
     "extension": "hwpx",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "보고/제출",
     "deadline_iso": null,
@@ -1004,7 +1046,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "붙임 2. 2026년 학교도서관 현황조사 안내서(학교용)",
@@ -1014,7 +1057,7 @@
     "extension": "pdf",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "보고/제출",
     "deadline_iso": null,
@@ -1026,7 +1069,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "붙임 3. 2026년 학교도서관 현황조사 참여 방법(교육청 및 교육지원청)",
@@ -1036,7 +1080,7 @@
     "extension": "hwpx",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "보고/제출",
     "deadline_iso": null,
@@ -1048,7 +1092,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "2026. 새로운학교네트워크 활동가 워크숍 참석 안내",
@@ -1058,7 +1103,7 @@
     "extension": "odt",
     "sender_level": "단체/기타",
     "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
+    "category_reason": "참석·협조 요청 → 부장이 직접 처리할 할일형",
     "placement": "교무수첩 상단(할 일·D-day)",
     "task_type": "연수/교육",
     "deadline_iso": "2026-06-30",
@@ -1070,7 +1115,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "급함+중요"
+    "quadrant": "급함+중요",
+    "owner": "부장"
   },
   {
     "title": "2026 활동가 워크숍 계획서",
@@ -1092,7 +1138,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "2026. 새로운학교네트워크 활동가워크숍 신청자",
@@ -1114,7 +1161,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "2026학년도 7월 늘봄지원실장 근무 계획 변경 실시",
@@ -1136,7 +1184,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "2026학년도 임기제 교육연구사 대체인력(늘봄지원실장) 운영지침",
@@ -1158,7 +1207,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[알림_협조] 2026년 2학기 1대1 읽기학습 심층검사 일정 안내",
@@ -1180,7 +1230,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "2026학년도 2학기 1대1 맞춤형 읽기학습 프로그램 심층검사 일정(발송용)",
@@ -1202,7 +1253,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "［알림_제출_교데통］2026학년도 현장체험학습 운영 계획 안내 및 운영 현황 제출",
@@ -1212,7 +1264,7 @@
     "extension": "odt",
     "sender_level": "상급기관",
     "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
+    "category_reason": "보고·제출·조사 → 반드시 처리해야 하는 할일형",
     "placement": "교무수첩 상단(할 일·D-day)",
     "task_type": "행사/사업",
     "deadline_iso": "2026-03-06",
@@ -1224,7 +1276,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "급함+중요"
+    "quadrant": "급함+중요",
+    "owner": "부장"
   },
   {
     "title": "붙임1. 2026학년도 현장체험학습 운영 계획",
@@ -1233,9 +1286,9 @@
     "kind": "첨부",
     "extension": "hwpx",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
+    "placement": "자료실 보관",
     "task_type": "행사/사업",
     "deadline_iso": "2026-03-06",
     "deadline_label": "제출기한",
@@ -1246,7 +1299,8 @@
     "stale_dropped": 2,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "급함+중요"
+    "quadrant": "급함+중요",
+    "owner": null
   },
   {
     "title": "붙임2. 2026학년도 현장체험학습 운영 예정 현황",
@@ -1256,7 +1310,7 @@
     "extension": "xlsx",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "행사/사업",
     "deadline_iso": null,
@@ -1268,7 +1322,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "붙임3. 2026학년도 현장체험학습 지원금 산출을 위한 집행 결과",
@@ -1278,7 +1333,7 @@
     "extension": "xlsx",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "행사/사업",
     "deadline_iso": null,
@@ -1290,7 +1345,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "붙임4. 2026학년도 수학여행 안전도우미 서비스 신청서",
@@ -1300,7 +1356,7 @@
     "extension": "hwpx",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "기타",
     "deadline_iso": null,
@@ -1312,7 +1368,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[연수_교데통] 2026 초등 학교생활기록부 기록 및 학업성적관리 시행지침 안내 연수 참석 협조 요청",
@@ -1322,7 +1379,7 @@
     "extension": "odt",
     "sender_level": "상급기관",
     "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
+    "category_reason": "참석·협조 요청 → 부장이 직접 처리할 할일형",
     "placement": "교무수첩 상단(할 일·D-day)",
     "task_type": "연수/교육",
     "deadline_iso": "2026-03-06",
@@ -1334,7 +1391,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "급함+중요"
+    "quadrant": "급함+중요",
+    "owner": "부장"
   },
   {
     "title": "2026 초등 학교생활부 기록 및 학업성적관리 시행지침 안내 연수 운영 계획[파급용]",
@@ -1343,9 +1401,9 @@
     "kind": "첨부",
     "extension": "hwp",
     "sender_level": "상급기관",
-    "category": "할일형",
-    "category_reason": "마감일(액션 기한)이 있어 할일형으로 분류",
-    "placement": "교무수첩 상단(할 일·D-day)",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "연수/교육",
     "deadline_iso": "2026-03-06",
     "deadline_label": "신청기한",
@@ -1356,7 +1414,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "급함+중요"
+    "quadrant": "급함+중요",
+    "owner": "담임(공람)"
   },
   {
     "title": "2026 학교생활기록부 기록 및 학업성적관리 지침 안내 연수 대상자 추천(서식)",
@@ -1365,9 +1424,9 @@
     "kind": "첨부",
     "extension": "xlsx",
     "sender_level": "상급기관",
-    "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
-    "placement": "자료실 보관",
+    "category": "공람형",
+    "category_reason": "교사 대상 연수·신청 안내 → 담임 선생님들에게 공람",
+    "placement": "공람(담임·교사 안내)",
     "task_type": "연수/교육",
     "deadline_iso": null,
     "deadline_label": null,
@@ -1378,7 +1437,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": "담임(공람)"
   },
   {
     "title": "2026학년도 제주특별자치도교육청 초등학교 학업성적관리 시행지침",
@@ -1400,7 +1460,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "2026학년도 학교생활기록부기재요령(초등학교)_음영처리",
@@ -1428,7 +1489,8 @@
     "stale_dropped": 4,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "급함+중요"
+    "quadrant": "급함+중요",
+    "owner": "부장"
   },
   {
     "title": "[알림_교데통] 2026학년도 숙박형 현장체험학습 학교지원센터 지원 안내",
@@ -1450,7 +1512,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[붙임1] 숙박형 현장체험학습 이용업체 안전위생점검 신청방법",
@@ -1460,7 +1523,7 @@
     "extension": "hwp",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "행사/사업",
     "deadline_iso": null,
@@ -1472,7 +1535,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "[붙임2] 숙박형 현장체험학습 차량 입차용역 입찰대행 신청방법",
@@ -1482,7 +1546,7 @@
     "extension": "hwp",
     "sender_level": "상급기관",
     "category": "참고형",
-    "category_reason": "마감일 없고 규정·배포도 아님 → 참고형",
+    "category_reason": "첨부 서식(작성용 양식) → 할 일 아님, 본문 공문에서 확인",
     "placement": "자료실 보관",
     "task_type": "행사/사업",
     "deadline_iso": null,
@@ -1494,7 +1558,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "2026년 정신건강 입원치료학생 출석대체학습 운영 계획 안내",
@@ -1516,7 +1581,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "2026 정신건강 입원치료학생 출석대체학습 운영 계획(발송)",
@@ -1538,7 +1604,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "［알림］현장체험학습 운영 길라잡이 배부",
@@ -1560,7 +1627,8 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   },
   {
     "title": "2026 현장체험학습 운영 길라잡이 배부 내역",
@@ -1582,6 +1650,7 @@
     "stale_dropped": 0,
     "is_image": false,
     "needs_review": true,
-    "quadrant": "기타"
+    "quadrant": "기타",
+    "owner": null
   }
 ]

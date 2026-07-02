@@ -1,11 +1,16 @@
 // 로컬 저장소 (SQLite via better-sqlite3).
-// 절대 원칙: 카드 메타·상태·우선순위(quadrant)만 저장.
+// 절대 원칙: 카드 메타·상태·투두만 저장.
 // 원문 본문(text)·학생/교사 식별정보는 저장하지 않습니다.
 const path = require("node:path");
 const fs = require("node:fs");
 const Database = require("better-sqlite3");
 
 let db;
+
+// 스키마 버전. 분류 규칙·컬럼이 바뀌면 올립니다.
+//   v2: 5성격(공람형) 도입, owner/done/file_path 컬럼, todos 테이블.
+//       기존 시드 카드는 옛 분류라서 지우고 새 시드로 다시 채웁니다.
+const SCHEMA_VERSION = 2;
 
 function initDb(userDataDir) {
   fs.mkdirSync(userDataDir, { recursive: true });
@@ -34,11 +39,46 @@ function initDb(userDataDir) {
       stale_dropped INTEGER DEFAULT 0,
       is_image INTEGER DEFAULT 0,
       needs_review INTEGER DEFAULT 1,
-      quadrant TEXT,          -- 아이젠하워 배치(사용자가 드래그로 조정 가능)
+      quadrant TEXT,          -- (구) 아이젠하워 배치 — 날짜별 보기로 바뀌며 미사용
+      owner TEXT,             -- 처리 주체 힌트: 부장 / 담임(공람)
+      file_path TEXT,         -- 원본 공문 파일 경로 (들어온 공문에서 채움)
+      done INTEGER DEFAULT 0, -- 처리 완료 표시
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+    CREATE TABLE IF NOT EXISTS todos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      text TEXT NOT NULL,
+      priority TEXT DEFAULT '보통',  -- 중요 / 보통 / 낮음
+      done INTEGER DEFAULT 0,
+      card_id INTEGER,               -- 공문에서 만든 투두면 연결 (없으면 NULL)
       created_at TEXT DEFAULT (datetime('now'))
     );
   `);
+  migrate();
   return db;
+}
+
+// 옛 버전 DB 를 현재 스키마로 끌어올립니다.
+function migrate() {
+  const v = db.pragma("user_version", { simple: true });
+  if (v >= SCHEMA_VERSION) return;
+
+  if (v < 2) {
+    // v1 → v2: 컬럼 추가 (이미 있으면 무시).
+    for (const ddl of [
+      "ALTER TABLE cards ADD COLUMN owner TEXT",
+      "ALTER TABLE cards ADD COLUMN file_path TEXT",
+      "ALTER TABLE cards ADD COLUMN done INTEGER DEFAULT 0",
+    ]) {
+      try { db.exec(ddl); } catch (_e) { /* 새 DB 는 이미 컬럼 보유 */ }
+    }
+    // 옛 4성격 시드 카드는 새 5성격 시드로 교체합니다.
+    // (아직 시드 데이터 단계라 사용자 데이터 손실이 없습니다.
+    //  '들어온 공문'으로 실제 파일을 넣기 시작하면 이 방식은 쓰지 않습니다.)
+    db.exec("DELETE FROM cards");
+  }
+
+  db.pragma(`user_version = ${SCHEMA_VERSION}`);
 }
 
 // 카드를 화면용 객체로 되돌립니다 (JSON 필드 복원, boolean 변환).
@@ -65,6 +105,9 @@ function rowToCard(r) {
     is_image: !!r.is_image,
     needs_review: !!r.needs_review,
     quadrant: r.quadrant,
+    owner: r.owner,
+    file_path: r.file_path,
+    done: !!r.done,
   };
 }
 
@@ -79,12 +122,14 @@ function insertCard(c) {
       title, sender, doc_number, kind, extension, sender_level,
       category, category_reason, placement, task_type,
       deadline_iso, deadline_label, deadline_raw, d_day, d_day_text,
-      other_deadlines, stale_dropped, is_image, needs_review, quadrant
+      other_deadlines, stale_dropped, is_image, needs_review, quadrant,
+      owner, file_path, done
     ) VALUES (
       @title, @sender, @doc_number, @kind, @extension, @sender_level,
       @category, @category_reason, @placement, @task_type,
       @deadline_iso, @deadline_label, @deadline_raw, @d_day, @d_day_text,
-      @other_deadlines, @stale_dropped, @is_image, @needs_review, @quadrant
+      @other_deadlines, @stale_dropped, @is_image, @needs_review, @quadrant,
+      @owner, @file_path, @done
     )
   `);
   return stmt.run({
@@ -108,11 +153,19 @@ function insertCard(c) {
     is_image: c.is_image ? 1 : 0,
     needs_review: c.needs_review === false ? 0 : 1,
     quadrant: c.quadrant ?? "기타",
+    owner: c.owner ?? null,
+    file_path: c.file_path ?? null,
+    done: c.done ? 1 : 0,
   }).lastInsertRowid;
 }
 
 function updateQuadrant(id, quadrant) {
   db.prepare("UPDATE cards SET quadrant = ? WHERE id = ?").run(quadrant, id);
+}
+
+// 카드 처리 완료/해제.
+function setCardDone(id, done) {
+  db.prepare("UPDATE cards SET done = ? WHERE id = ?").run(done ? 1 : 0, id);
 }
 
 function count() {
@@ -128,4 +181,37 @@ function seedCards(cards) {
   return cards.length;
 }
 
-module.exports = { initDb, listCards, insertCard, updateQuadrant, count, seedCards };
+// ── 투두리스트 ────────────────────────────────────────────
+function listTodos() {
+  return db
+    .prepare("SELECT * FROM todos ORDER BY done ASC, id DESC")
+    .all()
+    .map((r) => ({
+      id: r.id,
+      text: r.text,
+      priority: r.priority,
+      done: !!r.done,
+      card_id: r.card_id,
+      created_at: r.created_at,
+    }));
+}
+
+function addTodo(text, priority, cardId) {
+  const id = db
+    .prepare("INSERT INTO todos (text, priority, card_id) VALUES (?, ?, ?)")
+    .run(text, priority || "보통", cardId ?? null).lastInsertRowid;
+  return id;
+}
+
+function toggleTodo(id, done) {
+  db.prepare("UPDATE todos SET done = ? WHERE id = ?").run(done ? 1 : 0, id);
+}
+
+function removeTodo(id) {
+  db.prepare("DELETE FROM todos WHERE id = ?").run(id);
+}
+
+module.exports = {
+  initDb, listCards, insertCard, updateQuadrant, setCardDone, count, seedCards,
+  listTodos, addTodo, toggleTodo, removeTodo,
+};

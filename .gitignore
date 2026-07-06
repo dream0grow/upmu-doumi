@@ -16,3 +16,6 @@ prototype/dashboard.html
 # OS
 .DS_Store
 Thumbs.db
+
+# 윤문 스킬 작업 폴더 (임시 산출물)
+_workspace/

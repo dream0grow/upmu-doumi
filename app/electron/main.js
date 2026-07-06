@@ -196,6 +196,12 @@ function registerIpc() {
     return true;
   });
 
+  // 교무수첩 우선순위 저장 (부장이 드래그로 정한 순서)
+  ipcMain.handle("cards:setNoteOrder", (_e, { orders }) => {
+    db.setNoteOrder(orders);
+    return true;
+  });
+
   // 성격·처리주체 수동 수정 (자동 분류가 틀렸을 때 부장이 직접)
   ipcMain.handle("cards:updateClass", (_e, { id, category, owner }) => {
     db.updateCardClass(id, category, owner);

@@ -377,4 +377,106 @@
     font-size: 12px;
   }
   .todo-item .del:hover { color: #e74c3c; }
+
+  /* ── 교무수첩 (우선순위 목록 + 세부 할일) ─────────── */
+  .nb-section {
+    @apply bg-white rounded-[10px] shadow-card;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .nb-section h3 {
+    font-size: 15px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #eee;
+  }
+  .nb-section h3 .desc {
+    font-size: 12px;
+    color: #7f8c8d;
+    font-weight: normal;
+  }
+  .nb-row {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: #fdfdfd;
+  }
+  .nb-row.dragging { opacity: 0.4; }
+  .nb-row.done { opacity: 0.5; }
+  .nb-row.done .nb-title { text-decoration: line-through; }
+  .nb-rank {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #34495e;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .nb-grip { cursor: grab; color: #b2babb; font-size: 13px; margin-top: 2px; }
+  .nb-main { flex: 1; min-width: 0; }
+  .nb-title {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.35;
+    cursor: pointer;
+  }
+  .nb-title:hover { color: #2471a3; text-decoration: underline; }
+  .nb-meta {
+    font-size: 11.5px;
+    color: #7f8c8d;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 5px;
+  }
+  .nb-subs {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .nb-sub { display: flex; gap: 7px; align-items: center; font-size: 13px; }
+  .nb-sub .txt { flex: 1; min-width: 0; word-break: break-all; }
+  .nb-sub.done .txt { text-decoration: line-through; color: #b2babb; }
+  .nb-sub .del {
+    border: none;
+    background: none;
+    color: #d5dbdb;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .nb-sub .del:hover { color: #e74c3c; }
+  .nb-sub-input { display: flex; gap: 6px; margin-top: 4px; }
+  .nb-sub-input input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid #d5dbdb;
+    border-radius: 7px;
+    padding: 5px 10px;
+    font-size: 12.5px;
+  }
+  .nb-sub-input input:focus { outline: 2px solid #1abc9c33; border-color: #1abc9c; }
+  .nb-sub-input button {
+    background: #1abc9c;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 4px 11px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .nb-sub-input button:hover { background: #17a589; }
 }

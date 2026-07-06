@@ -11,7 +11,9 @@ let db;
 //   v2: 5성격(공람형) 도입, owner/done/file_path 컬럼, todos 테이블.
 //   v3: 공문 세트 묶기 — 본문+첨부(서식 등)를 카드 1장으로, attachments 컬럼.
 //       시드가 바뀌므로 카드를 지우고 새 시드로 다시 채웁니다.
-const SCHEMA_VERSION = 3;
+//   v4: 교무수첩 — note_order 컬럼(부장이 드래그로 정한 우선순위).
+//       컬럼만 추가하고 기존 카드는 그대로 둡니다.
+const SCHEMA_VERSION = 4;
 
 function initDb(userDataDir) {
   fs.mkdirSync(userDataDir, { recursive: true });
@@ -45,6 +47,7 @@ function initDb(userDataDir) {
       file_path TEXT,         -- 원본 공문 파일 경로 (들어온 공문에서 채움)
       attachments TEXT,       -- 같은 공문 세트의 첨부(서식 등) JSON 목록
       done INTEGER DEFAULT 0, -- 처리 완료 표시
+      note_order INTEGER,     -- 교무수첩 우선순위 (부장이 드래그로 지정, NULL=자동 D-day순)
       created_at TEXT DEFAULT (datetime('now'))
     );
     CREATE TABLE IF NOT EXISTS todos (
@@ -95,19 +98,28 @@ function migrate() {
   const v = db.pragma("user_version", { simple: true });
   if (v >= SCHEMA_VERSION) return;
 
-  // 컬럼 추가 (이미 있으면 무시).
-  for (const ddl of [
-    "ALTER TABLE cards ADD COLUMN owner TEXT",
-    "ALTER TABLE cards ADD COLUMN file_path TEXT",
-    "ALTER TABLE cards ADD COLUMN done INTEGER DEFAULT 0",
-    "ALTER TABLE cards ADD COLUMN attachments TEXT",
-  ]) {
-    try { db.exec(ddl); } catch (_e) { /* 새 DB 는 이미 컬럼 보유 */ }
+  if (v < 3) {
+    // 컬럼 추가 (이미 있으면 무시).
+    for (const ddl of [
+      "ALTER TABLE cards ADD COLUMN owner TEXT",
+      "ALTER TABLE cards ADD COLUMN file_path TEXT",
+      "ALTER TABLE cards ADD COLUMN done INTEGER DEFAULT 0",
+      "ALTER TABLE cards ADD COLUMN attachments TEXT",
+    ]) {
+      try { db.exec(ddl); } catch (_e) { /* 새 DB 는 이미 컬럼 보유 */ }
+    }
+    // 옛 분류/낱개 카드 시드는 새 시드(공문 세트)로 교체합니다.
+    // (아직 시드 데이터 단계라 사용자 데이터 손실이 없습니다.
+    //  '들어온 공문'으로 실제 파일을 넣기 시작하면 이 방식은 쓰지 않습니다.)
+    db.exec("DELETE FROM cards");
   }
-  // 옛 분류/낱개 카드 시드는 새 시드(공문 세트)로 교체합니다.
-  // (아직 시드 데이터 단계라 사용자 데이터 손실이 없습니다.
-  //  '들어온 공문'으로 실제 파일을 넣기 시작하면 이 방식은 쓰지 않습니다.)
-  db.exec("DELETE FROM cards");
+
+  if (v < 4) {
+    // v4: 교무수첩 우선순위 컬럼. 카드는 지우지 않습니다
+    // ('들어온 공문'으로 넣은 실제 데이터가 있을 수 있으므로).
+    try { db.exec("ALTER TABLE cards ADD COLUMN note_order INTEGER"); }
+    catch (_e) { /* 새 DB 는 이미 컬럼 보유 */ }
+  }
 
   db.pragma(`user_version = ${SCHEMA_VERSION}`);
 }
@@ -140,6 +152,7 @@ function rowToCard(r) {
     file_path: r.file_path,
     attachments: r.attachments ? JSON.parse(r.attachments) : [],
     done: !!r.done,
+    note_order: r.note_order ?? null,
   };
 }
 
@@ -199,6 +212,16 @@ function updateQuadrant(id, quadrant) {
 // 카드 처리 완료/해제.
 function setCardDone(id, done) {
   db.prepare("UPDATE cards SET done = ? WHERE id = ?").run(done ? 1 : 0, id);
+}
+
+// 교무수첩에서 부장이 드래그로 정한 우선순위를 한 번에 저장합니다.
+// (설계 원칙: 우선순위는 자동화하지 않음 — 사람이 정한 순서를 그대로 기억)
+function setNoteOrder(orders) {
+  const stmt = db.prepare("UPDATE cards SET note_order = ? WHERE id = ?");
+  const runAll = db.transaction((rows) => {
+    for (const o of rows) stmt.run(o.order, o.id);
+  });
+  runAll(orders);
 }
 
 // 부장이 직접 성격·처리주체를 고칩니다 (자동 분류가 틀렸을 때).
@@ -415,7 +438,8 @@ function markProcessed(filePath) {
 }
 
 module.exports = {
-  initDb, listCards, insertCard, updateQuadrant, setCardDone, updateCardClass,
+  initDb, listCards, insertCard, updateQuadrant, setCardDone, setNoteOrder,
+  updateCardClass,
   findClassOverride, count, seedCards,
   getCard, findCardByDoc, appendAttachment, promoteMain,
   listTodos, addTodo, toggleTodo, updateTodo, removeTodo,

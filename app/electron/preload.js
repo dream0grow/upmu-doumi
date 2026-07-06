@@ -26,6 +26,8 @@ contextBridge.exposeInMainWorld("gyomu", {
     ipcRenderer.invoke("cards:updateQuadrant", { id, quadrant }),
   // 카드 처리 완료/해제
   setCardDone: (id, done) => ipcRenderer.invoke("cards:setDone", { id, done }),
+  // 교무수첩 우선순위 저장 (드래그로 정한 순서: [{id, order}, ...])
+  setNoteOrder: (orders) => ipcRenderer.invoke("cards:setNoteOrder", { orders }),
   // 성격·처리주체 수동 수정
   updateCardClass: (id, category, owner) =>
     ipcRenderer.invoke("cards:updateClass", { id, category, owner }),

@@ -3,10 +3,11 @@ import TopBar from "./components/TopBar";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Inbox from "./pages/Inbox";
+import Notebook from "./pages/Notebook";
 import FeedbackModal from "./components/FeedbackModal";
 
-// 지금 동작하는 페이지: 홈(home) · 들어온 공문(inbox). 나머지는 이후 단계.
-type Page = "home" | "inbox";
+// 지금 동작하는 페이지: 홈 · 공문 집어넣기 · 교무수첩. 나머지는 이후 단계.
+type Page = "home" | "inbox" | "notebook";
 
 // 전체 셸: 상단 바 + (좌측 메뉴 | 우측 작업영역).
 // prototype/dashboard.html 의 .top / .layout(.side + .main) 구조 그대로.
@@ -21,12 +22,14 @@ export default function App() {
         <Sidebar
           active={page}
           onSelect={(key) => {
-            if (key === "home" || key === "inbox") setPage(key);
+            if (key === "home" || key === "inbox" || key === "notebook") setPage(key);
             if (key === "feedback") setShowFeedback(true);
           }}
         />
-        {/* key 로 페이지 전환 시 다시 로드 → 들어온 공문에서 넣은 카드가 홈에 반영 */}
-        {page === "home" ? <Dashboard key="home" /> : <Inbox key="inbox" />}
+        {/* key 로 페이지 전환 시 다시 로드 → 들어온 공문에서 넣은 카드가 홈·수첩에 반영 */}
+        {page === "home" && <Dashboard key="home" />}
+        {page === "inbox" && <Inbox key="inbox" />}
+        {page === "notebook" && <Notebook key="notebook" />}
       </div>
       <FeedbackModal open={showFeedback} onClose={() => setShowFeedback(false)} />
     </div>

@@ -1,7 +1,7 @@
 import { cn } from "../lib/utils";
 
 // 좌측 고정 메뉴. prototype/dashboard.html 의 .side 를 그대로 옮긴 것.
-// 지금 동작: 홈 · 들어온 공문 · 의견 보내기. 나머지는 이후 단계에서 연결.
+// 지금 동작: 홈 · 공문 집어넣기 · 교무수첩 · 의견 보내기. 나머지는 이후 단계에서 연결.
 const TOP = [
   { key: "home", label: "🏠 홈" },
   { key: "inbox", label: "📥 공문 집어넣기" },
@@ -16,7 +16,7 @@ const BOTTOM = [
   { key: "settings", label: "⚙ 설정" },
 ];
 
-const ENABLED = new Set(["home", "inbox", "feedback"]);
+const ENABLED = new Set(["home", "inbox", "notebook", "feedback"]);
 
 interface Props {
   active?: string;

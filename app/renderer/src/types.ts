@@ -85,6 +85,7 @@ export interface Card extends NotebookEntry {
   done?: boolean; // 처리 완료 표시
   file_path?: string | null; // 원본 공문 파일 경로 (들어온 공문에서 채움)
   attachments?: Attachment[]; // 같은 공문 세트의 첨부(서식 등)
+  note_order?: number | null; // 교무수첩 우선순위 (부장이 드래그로 지정, null=자동)
   ai?: AiSuggestion;
 }
 
@@ -155,6 +156,7 @@ export interface GyomuApi {
   listCards(): Promise<Card[]>;
   updateQuadrant(id: number, quadrant: Quadrant): Promise<void>;
   setCardDone(id: number, done: boolean): Promise<void>;
+  setNoteOrder(orders: { id: number; order: number }[]): Promise<void>;
   updateCardClass(id: number, category: Category, owner: Owner): Promise<void>;
   seedIfEmpty(): Promise<number>;
   extractFile(filePath: string, withAi?: boolean): Promise<ExtractResult>;

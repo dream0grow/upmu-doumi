@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Feedback, FeedbackKind, Outbox } from "../types";
+import { useEscapeKey } from "../lib/useEscapeKey";
 
 interface Props {
   open: boolean;
@@ -27,6 +28,8 @@ export default function FeedbackModal({ open, onClose }: Props) {
       })();
     }
   }, [open]);
+
+  useEscapeKey(open, onClose); // ESC 키로도 닫힘
 
   if (!open) return null;
 

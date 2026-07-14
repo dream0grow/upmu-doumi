@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Todo, TodoPriority } from "../types";
 import { cn } from "../lib/utils";
+import { useEscapeKey } from "../lib/useEscapeKey";
 import { CARD_DRAG_TYPE } from "./OfficialCard";
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
   onUpdate: (id: number, text: string, priority: TodoPriority) => void;
   onRemove: (id: number) => void;
   onOpenCard: (cardId: number) => void; // 공문에서 온 투두 → 공문 상세 열기
+  cardTitleOf?: (cardId: number) => string | null; // 📄 에 공문 제목 표시용
 }
 
 // 중요도 태그 정의 (색·아이콘). 태그 클릭으로 필터/변경.
@@ -28,7 +30,7 @@ function nextPriority(p: TodoPriority): TodoPriority {
 // 항목의 중요도 태그 클릭 = 중요→보통→낮음 순환 변경.
 // 항목 글자 클릭 = 상세 창(이름 편집·중요도·연결 공문).
 export default function TodoPanel({
-  todos, onAdd, onToggle, onUpdate, onRemove, onOpenCard,
+  todos, onAdd, onToggle, onUpdate, onRemove, onOpenCard, cardTitleOf,
 }: Props) {
   const [text, setText] = useState("");
   const [priority, setPriority] = useState<TodoPriority>("보통");
@@ -157,7 +159,18 @@ export default function TodoPanel({
                 onClick={() => setDetail(t)}
                 title="클릭하면 상세 보기·이름 편집"
               >
-                {t.card_id != null && <span title="공문에서 추가됨">📄 </span>}
+                {t.card_id != null && (
+                  <span
+                    title={
+                      // 마우스를 올리면 어떤 공문에서 온 할 일인지 보여줍니다
+                      cardTitleOf?.(t.card_id)
+                        ? `연결된 공문: ${cardTitleOf(t.card_id)}`
+                        : "공문에서 추가됨"
+                    }
+                  >
+                    📄{" "}
+                  </span>
+                )}
                 {t.text}
               </span>
               {/* 중요도 클릭 → 중요→보통→낮음 순환 변경 */}
@@ -203,6 +216,8 @@ function TodoDetailModal({
 }) {
   const [text, setText] = useState(todo.text);
   const [priority, setPriority] = useState<TodoPriority>(todo.priority);
+
+  useEscapeKey(true, save); // ESC 키 = 배경 클릭과 같게 저장하고 닫기
 
   function save() {
     const t = text.trim();

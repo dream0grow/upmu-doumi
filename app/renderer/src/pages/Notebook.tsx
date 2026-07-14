@@ -217,6 +217,7 @@ export default function Notebook() {
                 {open && c.id !== undefined && (
                   <SubTasks
                     subs={subs}
+                    cardTitle={c.title}
                     onAdd={(text) => addSub(c.id!, text)}
                     onToggle={toggleSub}
                     onRemove={removeSub}
@@ -306,19 +307,28 @@ function sortNotebook(a: Card, b: Card): number {
 
 // ── 세부 할일 체크리스트 (한 카드 아래에 붙는 부분) ─────────
 function SubTasks({
-  subs, onAdd, onToggle, onRemove,
+  subs, cardTitle, onAdd, onToggle, onRemove,
 }: {
   subs: Todo[];
+  cardTitle: string | null;
   onAdd: (text: string) => void;
   onToggle: (id: number, done: boolean) => void;
   onRemove: (id: number) => void;
 }) {
   const [text, setText] = useState("");
+  const [copied, setCopied] = useState(false);
   function submit() {
     const t = text.trim();
     if (!t) return;
     onAdd(t);
     setText("");
+  }
+  // 공문 제목 복사 — 세부 할일에 붙여넣어 어떤 공문인지 표시할 때 사용.
+  async function copyTitle() {
+    if (!cardTitle) return;
+    await navigator.clipboard.writeText(cardTitle);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   }
   return (
     <div className="nb-subs">
@@ -342,6 +352,15 @@ function SubTasks({
           onKeyDown={(e) => e.key === "Enter" && submit()}
           placeholder="세부 할일 입력하고 엔터 (예: 명단 취합해서 회신)"
         />
+        {cardTitle && (
+          <button
+            className="copy"
+            onClick={copyTitle}
+            title="공문 제목을 복사합니다 — 세부 할일에 붙여넣어 쓰세요"
+          >
+            {copied ? "복사됨 ✓" : "📋 제목 복사"}
+          </button>
+        )}
         <button onClick={submit}>추가</button>
       </div>
     </div>

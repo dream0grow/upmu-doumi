@@ -3,7 +3,7 @@
 // - SQLite(카드 저장) + 파이썬 엔진(추출) IPC 핸들러 등록
 // - 절대 원칙: 공문 원문·개인정보는 PC 밖으로 안 나감. 처리는 전부 로컬.
 //   (개인정보 아닌 의견·분류 수정 내역만, 사용자가 '보내기'를 눌렀을 때 전송)
-const { app, BrowserWindow, dialog, ipcMain, shell } = require("electron");
+const { app, BrowserWindow, dialog, ipcMain, net, shell } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");
 
@@ -266,6 +266,7 @@ function registerIpc() {
 
     // ① 게시판식 제출 (구글 폼) — 설정돼 있으면 이걸로 끝.
     const cfg = loadFeedbackConfig();
+    let failReason = null; // 폼 제출이 안 됐을 때 아래 안내문에 붙일 사유
     if (cfg && cfg.formUrl && cfg.fields && cfg.fields.text) {
       const lines = outbox.feedback
         .map((f) => `(${f.kind}) ${f.text}`)
@@ -277,20 +278,34 @@ function registerIpc() {
         body.append(cfg.fields.data, JSON.stringify(outbox.corrections));
       }
       try {
-        const res = await fetch(cfg.formUrl, {
+        // net.fetch = 크롬 네트워크 스택 사용. Node 기본 fetch 는 시스템(학교망)
+        // 프록시 설정을 몰라서 실패할 수 있어 이걸로 보냅니다.
+        const res = await net.fetch(cfg.formUrl, {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: body.toString(),
         });
-        if (res.ok) {
+        const finalUrl = res.url || "";
+        const html = await res.text();
+        if (finalUrl.includes("accounts.google.com")) {
+          // 로그인 화면으로 돌려보냄 → 폼이 로그인을 요구하는 상태
+          failReason =
+            "로그인이 걸려 있습니다 — 폼 설정에서 '응답 1회로 제한'과 '로그인 필요'를 꺼 주세요";
+        } else if (!res.ok) {
+          failReason = `수합함 응답 오류 (HTTP ${res.status})`;
+        } else if (html.includes("FB_PUBLIC_LOAD_DATA_")) {
+          // 접수 확인 대신 폼 화면이 다시 온 것 → 필수·형식 검증에 걸림
+          failReason =
+            "폼이 제출을 거부했습니다 — 문항의 '필수'와 '응답 확인(형식 검증)'을 꺼 주세요";
+        } else {
           db.markFeedbackSent();
           return {
             ok: true, count: n,
             message: `수합함(게시판)으로 바로 보냈습니다 — ${n}건. 감사합니다!`,
           };
         }
-      } catch (_e) {
-        /* 네트워크 실패 → 아래 메일 방식으로 넘어감 */
+      } catch (e) {
+        failReason = "수합함 연결 실패: " + String(e).slice(0, 120);
       }
     }
 
@@ -309,7 +324,9 @@ function registerIpc() {
     db.markFeedbackSent();
     return {
       ok: true, file, count: n,
-      message: "온라인 수합함이 아직 설정되지 않아, 파일 + 메일 초안으로 준비했습니다.",
+      message: failReason
+        ? `수합함(구글 폼) 제출이 안 돼서 파일 + 메일 초안으로 준비했습니다. 사유: ${failReason}`
+        : "온라인 수합함이 아직 설정되지 않아, 파일 + 메일 초안으로 준비했습니다.",
     };
   });
 

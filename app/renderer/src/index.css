@@ -477,6 +477,14 @@
     padding: 4px 11px;
     font-size: 12px;
     cursor: pointer;
+    white-space: nowrap;
   }
   .nb-sub-input button:hover { background: #17a589; }
+  /* 공문 '제목 복사' — 붙여넣어서 세부 할일에 공문 이름을 남길 때 */
+  .nb-sub-input button.copy {
+    background: #fff;
+    color: #34495e;
+    border: 1px solid #d5dbdb;
+  }
+  .nb-sub-input button.copy:hover { background: #f0f3f4; border-color: #95a5a6; }
 }

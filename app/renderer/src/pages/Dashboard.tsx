@@ -169,6 +169,9 @@ export default function Dashboard() {
             const c = cards.find((x) => x.id === cardId);
             if (c) setSelected(c);
           }}
+          cardTitleOf={(cardId) =>
+            cards.find((x) => x.id === cardId)?.title ?? null
+          }
         />
       </div>
 

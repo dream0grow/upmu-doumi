@@ -1,5 +1,6 @@
 import type { Card, Category, Owner } from "../types";
 import { CATEGORIES, CATEGORY_META, computeDday, ddayText } from "../lib/cards";
+import { useEscapeKey } from "../lib/useEscapeKey";
 
 interface Props {
   card: Card | null;
@@ -12,6 +13,7 @@ interface Props {
 // 한 줄 요약·세부 할 일은 로컬 AI(Ollama) 제안이라 '확인 필요' 문구를 붙입니다.
 // 원본 파일 경로가 있으면(들어온 공문에서 넣은 공문) 바로 열 수 있습니다.
 export default function DetailModal({ card, onClose, onUpdated }: Props) {
+  useEscapeKey(!!card, onClose); // ESC 키로도 닫힘 (훅이라 early return 앞에 둠)
   if (!card) return null;
 
   // 부장이 직접 성격/처리주체를 고칩니다 (자동 분류가 틀렸을 때).

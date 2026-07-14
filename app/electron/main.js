@@ -287,8 +287,8 @@ function registerIpc() {
         });
         const finalUrl = res.url || "";
         const html = await res.text();
-        if (finalUrl.includes("accounts.google.com")) {
-          // 로그인 화면으로 돌려보냄 → 폼이 로그인을 요구하는 상태
+        if (finalUrl.includes("accounts.google.com") || res.status === 401) {
+          // 로그인 화면으로 돌려보내거나 401 → 폼이 로그인을 요구하는 상태
           failReason =
             "로그인이 걸려 있습니다 — 폼 설정에서 '응답 1회로 제한'과 '로그인 필요'를 꺼 주세요";
         } else if (!res.ok) {
